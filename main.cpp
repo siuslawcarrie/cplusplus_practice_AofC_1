@@ -13,10 +13,13 @@ then sum all lines 2 digit numbers together. */
 #include <vector>
 #include <map>
 #include <set>
+#include <algorithm>
 
 //**FUNCTION DECLARATIONS
 void parseData(std::ifstream &in, std::vector<int> &mixed_chars);
 
+int pull_digit(std::string s);//iterate through string and pull out 1st digit
+void integer_sum(std::vector<int> &some_ints);//sum integers in vector
 int main() {
 //vector
     std::vector<int> mixed_chars;
@@ -43,26 +46,41 @@ void parseData(std::ifstream &in, std::vector<int> &mixed_chars) {//must be refe
     {
         getline(in,
                 line);//passing in the stream, and an empty string called line, puts the first line of the txt file into line
-        bool running = true;
-        int i = 0; //sets index
-        while (running) {
-            char character = line[i]; //puts content of index into variable character
-            if (isdigit(character) ==
-                true) {//looks at CONTENT of index (ex. 0 on first loop), is what's in index a digit?
-                running = false;
-                int int_num = std::stoi(&character);
-                std::cout << "here is the number: " << character << std::endl;
-                mixed_chars.push_back(int_num);
-            }//closing brace if statement
-            else if (i < line.size() - 1) {
-                i++;
-            } else {
-                running = false;
-            }
 
-        }//closing brace for loop
-    }//closing brace while not end of file
+        int int_num = pull_digit(line);
+        int_num*=10;
+        std::reverse(line.begin(), line.end());
+        int int_num_rev = pull_digit(line);
+        int digits = int_num + int_num_rev;
+        std::cout << "here is the number: " << digits << std::endl;
+        mixed_chars.push_back(digits);
+        integer_sum(mixed_chars);
+    }//closing brace while loop
 }//closing brace parseData
+
+int pull_digit(std::string s) {
+    int i = 0; //sets index
+    while (i<s.size()){
+        char character = s[i]; //puts content of index into variable character
+        if (isdigit(character) ==
+            true) {//looks at CONTENT of index (ex. 0 on first loop), is what's in index a digit?
+            int num = std::stoi(&character);
+            return num;
+        } else {
+            i++;
+        }
+    }//closing brace while loop
+}//clsing brace pull digit
+
+void integer_sum(std::vector<int> &some_ints) {//sum of integers
+    int sum = 0;
+    int i = 0;
+    while(i<some_ints.size()){
+        sum += some_ints[i];
+        i++;
+    }
+    std::cout << "The sum of your numbers is: " << sum << std::endl;
+}//closing brace integer sum
 
 
 
